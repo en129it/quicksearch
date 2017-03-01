@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html ng-app="MyRegistry">
+	<head>
+<script src="jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="angular.js"></script>
+<script type="text/javascript" src="econtroller.js"></script>
+<script type="text/javascript" src="emodule.js"></script>
+
+<LINK href="bootstrap.css" rel="stylesheet" type="text/css" media="all"> 
+<LINK href="ecss.css" rel="stylesheet" type="text/css" media="all"> 
+
+<style>
+.container {
+	border: 1px solid #000;
+	border-radius: 6px;
+	background-color: #FFF;
+	padding: 0px 0px 0px 0px;
+	margin: 0px 0px 0px 0px;
+}
+
+.container input {
+	width: calc(100% - 20px);
+	margin: 10px 10px 10px 10px;
+	border-width: 0px;
+	
+}
+
+.category-container {
+	border-top: 1px solid #000;
+	padding: 4px 10px 4px 10px;
+
+}
+
+.category-container .title {
+	font-weight: bold;
+	margin-bottom: 9px;
+}
+
+.half-left, .half-right {
+	display: inline-block;
+	width: 100%;
+}
+
+.half-left {
+	border-right : 1px solid #000;
+}
+
+.warn {
+	color: goldenrod;
+}
+
+.selected {
+	background-color: blue;
+}
+
+.highlight{
+	font-weight: bold;
+}
+
+.autocomplete-suggestions-container {
+	max-height: 140px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	position: relative;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: auto;
+	z-index:999;
+	background-color: #cacaca;
+}
+
+.autocomplete-suggestions-scroller {
+	position: relative;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+}
+
+.propType {
+	border : 1px solid #000;
+	background-color: #000;
+	border-radius: 4px;
+	color: #FFF;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.value {
+	margin-left: 10px;
+	width: 100%;
+}
+
+.continue {
+	margin-top: 5px;
+	font-weight: bold;
+}
+
+.selectable {
+	cursor: pointer;
+}
+
+</style>
+
+</head>
+<body>
+
+<div ng-controller="MyController as myCont">
+
+<div>
+	<div class="container">
+			<input type="search" id="search" name="search" placeholder="Enter a value" autocomplete="off" ng-model="myCont.scope.searchText" ng-keydown="myCont.keydown($event)" ng-blur="myCont.blur()" ng-focus="myCont.focus()"/>
+			<div style="display: table; width: 100%">
+				<div class="category-container half-left" style="display: table-cell; vertical-align: top; width: 50%">
+					<div class="title">{{myCont.data[0].categoryName}}</div>
+					<div ng-if="myCont.data[0].getErrorMessage(myCont.scope.searchText)!=null">
+						<div class="warn">{{myCont.data[0].getErrorMessage(myCont.scope.searchText)}}</div>
+					</div>
+					<div ng-if="myCont.data[0].getErrorMessage(myCont.scope.searchText)==null">
+						<table>
+							<tr ng-repeat="m in myCont.data[0].dataSet.matches">
+								<td> 
+									<span class="propType">{{m.propType}}</span>
+								</td>
+								<td style="width: 100%">
+									<span class="value selectable">{{m.value}}</span>
+								</td>
+							</tr>
+							<tr ng-if="myCont.data[0].dataSet.matches.length>0">
+								<td colspan="2">
+									<div class="continue selectable">Search for "{{myCont.scope.searchText}}" in {{myCont.data[0].categoryName}}</div>
+								<td>
+							</tr>
+							<tr ng-if="myCont.data[0].dataSet.matches.length==0">
+								<td colspan="2">
+									<div class="warn">No match found</div>
+								<td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="category-container half-right" style="display: table-cell; vertical-align: top; width: 50%">
+					<div class="title">{{myCont.data[1].categoryName}}</div>
+					<div ng-if="myCont.data[1].getErrorMessage(myCont.scope.searchText)!=null">
+						<div class="warn">{{myCont.data[1].getErrorMessage(myCont.scope.searchText)}}</div>
+					</div>
+					<div ng-if="myCont.data[1].getErrorMessage(myCont.scope.searchText)==null">
+						<table>
+							<tr ng-repeat="m in myCont.data[1].dataSet.matches">
+								<td> 
+									<span class="propType">{{m.propType}}</span>
+								</td>
+								<td style="width: 100%">
+									<span class="value selectable">{{m.value}}</span>
+								</td>
+							</tr>
+							<tr ng-if="myCont.data[1].dataSet.matches.length>0">
+								<td colspan="2">
+									<div class="continue selectable">Search for "{{myCont.scope.searchText}}" in {{myCont.data[1].categoryName}}</div>
+								<td>
+							</tr>
+							<tr ng-if="myCont.data[1].dataSet.matches.length==0">
+								<td colspan="2">
+									<div class="warn">No match found</div>
+								<td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="category-container normal">
+				<div class="title">{{myCont.data[2].categoryName}}</div>
+				<div ng-if="myCont.data[2].getErrorMessage(myCont.scope.searchText)!=null">
+					<div class="warn">{{myCont.data[2].getErrorMessage(myCont.scope.searchText)}}</div>
+				</div>
+				<div ng-if="myCont.data[2].getErrorMessage(myCont.scope.searchText)==null">
+						<table>
+							<tr ng-repeat="m in myCont.data[2].dataSet.matches">
+								<td> 
+									<span class="propType">{{m.propType}}</span>
+								</td>
+								<td style="width: 100%">
+									<span class="value selectable">{{m.value}}</span>
+								</td>
+							</tr>
+							<tr ng-if="myCont.data[2].dataSet.matches.length>0">
+								<td colspan="2">
+									<div class="continue selectable">Search for "{{myCont.scope.searchText}}" in {{myCont.data[2].categoryName}}</div>
+								<td>
+							</tr>
+							<tr ng-if="myCont.data[2].dataSet.matches.length==0">
+								<td colspan="2">
+									<div class="warn">No match found</div>
+								<td>
+							</tr>
+						</table>
+				</div>
+			</div>
+	</div>
+</div>
+<!--
+<chips-autocomplete placeholder="Here..." 
+					minchars="3" 
+					searchtext="searchText" 
+					suggestions="myCont.getMatches(searchText)" 
+					selected-suggestion="myCont.selectedSuggestion">
+	<suggestion-item-template>
+		<div>
+			<div>Suggestion</div>
+			<div><text-highlighter text="searchText">{{suggestionItem}}</text-highlighter></div>
+		</div>
+	</suggestion-item-template>
+</chips-autocomplete>
+
+<br/>
+Next
+<br/>
+
+<autocomplete-chips datasource="myCont.getChipsData()">
+	<chip-item-template>
+		{{chip}}
+	</chip-item-template>
+</autocomplete-chips>
+-->
+
+
+
+</div>
+
+
+
+</body>
+</html>
